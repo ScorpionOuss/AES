@@ -21,4 +21,4 @@ struct aes runningAES;
 char *inFile;
 
 void keyExpansion();
-void addRoundKey(int round);
+void cipher();

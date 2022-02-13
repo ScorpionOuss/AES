@@ -51,4 +51,9 @@ void cipher(){
 //     };
     /** To check this out **/
     addRoundKey(0);
+
+    for (int round = 1; round < 2; round++){
+        subBlock(runningAES.state);
+        shiftRows(runningAES.state);
+    }
 }

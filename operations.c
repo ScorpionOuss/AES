@@ -46,6 +46,14 @@ void subWord(word *w){
     }
 }
 
+void subBlock(byte *w){
+    for (int j = 0; j < Nb; j++){
+        for (int i = 0; i < wordSize; i++){
+            subBytes(((byte *)w + i + j*wordSize));
+        }
+    }
+}
+
 void rotWord(word *w){
     /**
      * @brief Takes a word as input and performs a 
@@ -76,13 +84,28 @@ void addRoundKey(int round){
      * @brief addRoundKey implementation
      * 
      */
-    printf("%d\n", sizeof(runningAES.w));
     for (int j = 0; j < Nb; j++){
         for (int i = 0; i < wordSize; i++){
             /** Byte-wise xor **/
             /** j references a word in the block
              * and i a byte in the word **/
             runningAES.state[i + j*wordSize] = runningAES.state[i + j*wordSize] ^ *((byte *)runningAES.w + Nb*round + i + j*wordSize);
+        }
+    }
+}
+
+void shiftRows(byte *block){
+    /**
+     * @brief Shift rows
+     * 
+     */
+    byte temp[Nb];
+    for (int i = 1; i < wordSize; i++){
+        for(int j = 0; j < Nb; j++){
+            temp[j] = *(block + i + j*wordSize);
+        }
+        for(int j = 0; j < Nb; j++){
+            *(block + i + j*wordSize) = temp[(j + i)%Nb];
         }
     }
 }
