@@ -20,5 +20,5 @@ struct aes runningAES;
 
 char *inFile;
 
-void keyExpansion();
-void cipher();
+
+void encrypt();

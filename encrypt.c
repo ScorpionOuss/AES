@@ -9,6 +9,17 @@
 
 byte Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
 
+void keyExpansion(void);
+void cipher(void);
+
+void encrypt(){
+    /**
+     * @brief Perform AES encryption
+     * 
+     */
+    keyExpansion();
+    cipher();
+}
 
 void keyExpansion(){
     word temp;
