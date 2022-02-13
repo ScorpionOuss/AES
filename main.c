@@ -4,10 +4,8 @@
 #include "encrypt.h"
 #include "operations.h"
 
-char *inFile = "in/aes_sample.in\0";
-int size = 4; /** This is Nk = Nb **/
-int wordSize = 4; /* We consider words of 32 bits = 4 bytes */
-int numRounds = 10; /* Number of rounds for AES-128 is 10 **/
+struct aes runningAES;
+
 
 /** Global variables are initialized by the
  * compiler itself and should be initialized
@@ -19,22 +17,23 @@ void main(int argc, char **argv){
      * @brief Main function
      * 
      */
-    /** Open the in file **/
-    FILE *fp = fopen(inFile, "r");
-    /*** Extract the key ***/
-    byte key[size*wordSize];
-    fread(key, 1, size*wordSize, fp);
 
+    /*** Extract the key ***/
+    byte key[Nk*wordSize];
+    fread(key, 1, Nk*wordSize, stdin);
+    memcpy(runningAES.key, (byte *) key, Nb*wordSize);
     /** We need to read the blocks to encrypt; Each block
      * is of 16 bytes size**/
     int readSize = 1;
-    char block[size*wordSize];
+    char block[Nb*wordSize];
     while (readSize){
-        readSize = fread(block, 1, size*wordSize, fp);
+        readSize = fread(block, 1, Nb*wordSize, stdin);
         if (readSize){
             /* Here we need to apply the encryption and write it into
-            the output file*/ 
-
+            the output file*/
+            memcpy(runningAES.state, (byte *) block, Nb*wordSize);
+            encrypt();
+            fwrite(runningAES.state, 1, Nb*wordSize, stdout);
         }
     };
 }
