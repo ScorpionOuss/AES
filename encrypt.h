@@ -7,9 +7,9 @@ typedef unsigned char byte;
 typedef struct { byte x[wordSize]; } word;
 
 struct aes {
-    byte key[Nk];
-    byte state[16];
-    word w[44];
+    byte key[Nk*wordSize];
+    byte state[Nb*wordSize];
+    word w[Nb*(numRounds+1)];
     
 };
 

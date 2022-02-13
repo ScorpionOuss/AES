@@ -82,8 +82,7 @@ void addRoundKey(int round){
             /** Byte-wise xor **/
             /** j references a word in the block
              * and i a byte in the word **/
-            printf("Go %d : %x, %x\n",i + j*wordSize, runningAES.state[i + j*wordSize], *(((byte *)runningAES.w + i + j*wordSize)));
-            //runningAES.state[i + j*wordSize] = runningAES.state[i + j*wordSize] ^ *((byte *)runningAES.w + Nb*round + i + j*wordSize);
+            runningAES.state[i + j*wordSize] = runningAES.state[i + j*wordSize] ^ *((byte *)runningAES.w + Nb*round + i + j*wordSize);
         }
     }
 }
