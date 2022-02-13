@@ -5,3 +5,4 @@ void wordXor(word *result, word *op1, word *op2);
 void subBlock(byte* w);
 void addRoundKey(int round);
 void shiftRows(byte *block);
+void mixColumns(byte *block);

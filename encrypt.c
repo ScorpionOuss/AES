@@ -7,7 +7,8 @@
 
 
 
-unsigned char Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
+byte Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
+
 
 void keyExpansion(){
     word temp;
@@ -41,19 +42,20 @@ void keyExpansion(){
 
 void cipher(){
     /**
-     * @brief 
+     * @brief Encryption function
      * 
      */
-//     struct aes {
-//     byte key[Nk];
-//     word w[Nb*numRounds];
-//     byte state[Nb*numRounds];
-//     };
-    /** To check this out **/
+
     addRoundKey(0);
 
-    for (int round = 1; round < 2; round++){
+    for (int round = 1; round < numRounds; round++){
         subBlock(runningAES.state);
         shiftRows(runningAES.state);
+        mixColumns(runningAES.state);
+        addRoundKey(round);
+
     }
+    subBlock(runningAES.state);
+    shiftRows(runningAES.state);
+    addRoundKey(numRounds);
 }
