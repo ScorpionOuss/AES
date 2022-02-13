@@ -9,12 +9,12 @@
 
 unsigned char Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
 
-void keyExpansion(byte *key, word *w, int nk){
+void keyExpansion(){
     word temp;
     int i = 0;
 
     /* We copy the key into the first 4 bytes of w */
-    memcpy((byte *) w, (byte *) key, nk*wordSize);
+    memcpy((byte *) runningAES.w, (byte *) runningAES.key, Nk*wordSize);
 
     /*** The difference between strncpy and memcpy
      * strcpy copies C **Strings**, if you're copying bulk
@@ -22,19 +22,33 @@ void keyExpansion(byte *key, word *w, int nk){
      * just broken ***/
     
     //assert
-    i = nk;
+    i = Nk;
     byte rcon[4] = {0, 0, 0, 0};
-    while(i < size*(numRounds + 1)){
-        temp = w[i -1];
-        if (i%nk == 0){
-            rcon[0] = Rcon[i/nk - 1]; 
+    while(i < Nb*(numRounds + 1)){
+        temp = runningAES.w[i -1];
+        if (i%Nk == 0){
+            rcon[0] = Rcon[i/Nk - 1];
             rotWord(&temp);
             subWord(&temp);
             wordXor(&temp, &temp, (word *) rcon);
-        } else if ((nk > 6 ) & (i%nk == size)){
+        } else if ((Nk > 6 ) & (i%Nk == 4)){
             subWord(&temp);
         }
-        wordXor(w + i, w + i -nk, &temp);
+        wordXor(runningAES.w + i, runningAES.w + i -Nk, &temp);
         i++;
     }
+}
+
+void cipher(){
+    /**
+     * @brief 
+     * 
+     */
+//     struct aes {
+//     byte key[Nk];
+//     word w[Nb*numRounds];
+//     byte state[Nb*numRounds];
+//     };
+    /** To check this out **/
+    addRoundKey(0);
 }
